@@ -1,6 +1,22 @@
 {
-  "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint","simple-import-sort","sort-keys-custom-order"],
   "extends": ["next/core-web-vitals","plugin:@typescript-eslint/recommended","prettier"],
-  "rules": {"semi":"error"}
+  "parser": "@typescript-eslint/parser",
+  "rules": {
+     // console.log error
+     "no-console": ["error", { "allow": ["warn", "info", "error"] }],
+         // For JS objects sorting
+    "sort-keys-custom-order/object-keys": [
+      "error",
+      { "orderedKeys": ["id", "name", "title"] }
+    ],
+    // For TS types sorting
+    "sort-keys-custom-order/type-keys": [
+      "error",
+      { "orderedKeys": ["id", "name", "title"] }
+    ],
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error"
+  
+  }
 }
