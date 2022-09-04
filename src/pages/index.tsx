@@ -1,16 +1,13 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
-// import { IngredienceData } from "src/componets/MealList/IngredienceData";
 import { mealData } from "src/componets/MealList/MealData";
 import { MealDataType } from "src/type/MealDataType";
-// import { MealList } from "src/componets/MealList/MealList";
 
 const Home: NextPage = () => {
   const [mealArray, setMealArray] = useState<MealDataType[]>(mealData);
   const [checkedMealArray, setCheckedMealArray] = useState<MealDataType[]>([]);
-  // const [mealIngredienceArray, setMealIngredienceArray] =
-  //   useState<any>(IngredienceData);
+  const [IngredienceArray, setIngredienceArray] = useState<any[]>([]);
 
   const handleMealchoise = (id: number) => {
     const newMealArray = mealArray.map((mealArray) => {
@@ -25,8 +22,24 @@ const Home: NextPage = () => {
   const handleSetMeal = () => {
     const newMealArray = mealArray.filter((meal) => meal.checked);
     setCheckedMealArray(newMealArray);
-    // console.log("newMealIngredienceArray", newMealIngredienceArray);
+    const newIngredienceArray = newMealArray.map((meal) => {
+      return meal.ingredience;
+    });
+    setIngredienceArray(newIngredienceArray);
   };
+
+  // 同じ材料を計算して配列を作る
+  const total = IngredienceArray.reduce(
+    (s1, e) =>
+      Object.entries(e).reduce(
+        (s2, [k, v]) => ({
+          ...s2,
+          [k]: (s2[k] || 0) + v,
+        }),
+        s1
+      ),
+    {}
+  );
 
   return (
     <div className="m-8">
@@ -79,16 +92,17 @@ const Home: NextPage = () => {
         {/* Ingredience list */}
         <div className="pt-8 pb-8">
           <h2 className="font-bold text-2xl my-4">Ingredience list</h2>
-          <ul>
-            {/* {mealIngredienceArray.map((mealIngre) => {
+          <div>
+            {Object.keys(total).map((e) => {
               return (
-                <li key={Object.keys(mealIngre)}>
-                  <span>{Object.keys(mealIngre)}:</span>&nbsp;&nbsp;
-                  <span>{Object.values(mealIngre)}</span>
-                </li>
+                <>
+                  <div key={e}>
+                    <span>{e}</span>: <span>{total[e]}</span>
+                  </div>
+                </>
               );
-            })} */}
-          </ul>
+            })}
+          </div>
         </div>
         {/* Shopping list */}
         <div className="pt-8 pb-8">
