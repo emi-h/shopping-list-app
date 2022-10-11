@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
 import { mealData } from "src/componets/MealList/MealData";
+import { writeUserData } from "src/lib/firebase";
 import { IngredienceType } from "src/type/IndredienceType";
 import { MealDataType } from "src/type/MealDataType";
 // import {
@@ -70,6 +71,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex-grow">
+        <button onClick={writeUserData}>ボタン</button>
         <h1 className="text-center text-5xl">Shopping list generator</h1>
         {/* Meal list */}
         <div className="pt-8 pb-8">
