@@ -2,5 +2,5 @@ export type MealDataType = {
   id: number;
   name: string;
   checked: boolean;
-  ingredience: { [prop: string]: number };
+  ingredienceJson: { ingredience: { [prop: string]: number } };
 };
