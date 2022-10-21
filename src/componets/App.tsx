@@ -1,9 +1,10 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import Head from "next/head";
-import Link from "next/link";
 import { FC, useEffect, useState } from "react";
 import { IngredienceType } from "src/type/IndredienceType";
 import { MealDataType } from "src/type/MealDataType";
+
+import { Nav } from "./Nav";
 
 export const App: FC = () => {
   const [mealArray, setMealArray] = useState<MealDataType[]>([]);
@@ -83,22 +84,7 @@ export const App: FC = () => {
 
       <main className="flex-grow">
         <h1 className="text-center text-5xl">Shopping list generator</h1>
-        <nav>
-          <ul className="flex">
-            <li>
-              <Link href="add">
-                <a className="border p-4 mt-8 inline-block">メニュー追加</a>
-              </Link>
-            </li>
-            <li>
-              <Link href="account">
-                <a className="border p-4 mt-8 inline-block">
-                  アカウント情報変更
-                </a>
-              </Link>
-            </li>
-          </ul>
-        </nav>
+        <Nav />
         {/* Meal list */}
         <div className="pt-8 pb-8">
           <h2 className="font-bold text-2xl my-4">Meal list</h2>
@@ -110,10 +96,11 @@ export const App: FC = () => {
                     onClick={() => {
                       handleMealchoise(meal.id);
                     }}
+                    className="mr-4"
                   >
-                    {meal.checked ? "○" : "✖︎"}
+                    <span className="mr-2">{meal.checked ? "○" : "✖︎"}</span>
+                    <span>{meal.name}</span>
                   </button>
-                  <span>{meal.name}</span>
                 </div>
               );
             })}
