@@ -1,3 +1,4 @@
+import { Button, CopyButton } from "@mantine/core";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import Head from "next/head";
 import { FC, useEffect, useState } from "react";
@@ -62,7 +63,7 @@ export const App: FC = () => {
       ),
     {}
   );
-  // console.log("total", total);
+  const copyText = JSON.stringify(total);
 
   // 手持ちの材料をマイナスする
   // const handleReduceIngredience = (e: ChangeEvent<HTMLInputElement>) => {
@@ -83,11 +84,15 @@ export const App: FC = () => {
       </Head>
 
       <main className="flex-grow">
-        <h1 className="text-center text-5xl">Shopping list generator</h1>
+        <h1 className="text-center text-3xl">
+          --- Shopping list generator ---
+        </h1>
         <Nav />
         {/* Meal list */}
         <div className="pt-8 pb-8">
-          <h2 className="font-bold text-2xl my-4">Meal list</h2>
+          <h2 className="font-bold text-2xl my-4">
+            1.Meal list：Choose menu and click the button.
+          </h2>
           <div>
             {mealArray.map((meal) => {
               return (
@@ -111,7 +116,9 @@ export const App: FC = () => {
         </div>
         {/* Meal list(ticked) */}
         <div className="pt-8 pb-8">
-          <h2 className="font-bold text-2xl my-4">Meal list(ticked)</h2>
+          <h2 className="font-bold text-2xl my-4">
+            2.Meal list(ticked)：check the menu you chose.
+          </h2>
           <div>
             {checkedMealArray.map((meal) => {
               return (
@@ -122,20 +129,28 @@ export const App: FC = () => {
             })}
           </div>
         </div>
-        {/* Ingredience list */}
+        {/* <IngredienceList total={total} /> */}
         <div className="pt-8 pb-8">
-          <h2 className="font-bold text-2xl my-4">Ingredience list</h2>
-          <div>
-            {Object.keys(total).map((i) => {
-              return (
-                <>
-                  <div key={i}>
-                    <span>{i}</span>: <span>{total[i]}</span>
-                  </div>
-                </>
-              );
-            })}
-          </div>
+          <h2 className="font-bold text-2xl my-4">
+            3.Ingredience list：Generated the ingredience list from your meal.
+          </h2>
+          {/* Object.keys(total)でkeyの配列を作成 */}
+          {Object.keys(total).map((i) => {
+            return (
+              <>
+                <div key={i}>
+                  <span>{i}</span>: <span>{total[i]}</span>
+                </div>
+              </>
+            );
+          })}
+          <CopyButton value={copyText}>
+            {({ copied, copy }) => (
+              <Button color={copied ? "teal" : "blue"} onClick={copy}>
+                {copied ? "Copied text" : "Copy text 実装中"}
+              </Button>
+            )}
+          </CopyButton>
         </div>
         {/* Ingredience you already have */}
         {/* <div className="pt-8 pb-8">

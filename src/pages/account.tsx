@@ -1,6 +1,5 @@
 import { useSession } from "@supabase/auth-helpers-react";
 import { NextPage } from "next";
-import Link from "next/link";
 import { Account } from "src/componets/Account";
 import { Nav } from "src/componets/Nav";
 

@@ -25,7 +25,7 @@ const Home: NextPage = () => {
   const supabase = useSupabaseClient();
 
   return (
-    <div className="container" style={{ padding: "50px 0 100px 0" }}>
+    <>
       {!session ? (
         <Auth
           supabaseClient={supabase}
@@ -35,7 +35,7 @@ const Home: NextPage = () => {
       ) : (
         <App />
       )}
-    </div>
+    </>
   );
 };
 
