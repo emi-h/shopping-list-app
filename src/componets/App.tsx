@@ -70,13 +70,6 @@ export const App: FC = () => {
 
   const copyText = Object.entries(total).join("/");
 
-  // 手持ちの材料をマイナスする
-  // const handleReduceIngredience = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setReduceNumber(e.target.value);
-  //   console.log(e.target.value);
-  // };
-  // console.log("reduceValueArray", reduceValueArray);
-
   return (
     <div className="container mx-auto px-4">
       <div className="flex flex-col min-h-screen">
@@ -160,48 +153,7 @@ export const App: FC = () => {
               )}
             </CopyButton>
           </div>
-          {/* Ingredience you already have */}
-          {/* <div className="pt-8 pb-8">
-              <h2 className="font-bold text-2xl my-4">
-                Ingredience you already have
-              </h2>
-              <div>
-                {Object.keys(total).map((i) => {
-                  return (
-                    <>
-                      <div key={i} className="mb-4">
-                        <span>{i}</span>:{" "}
-                        <span>
-                          {" "}
-                          <input
-                            type="number"
-                            onChange={handleReduceIngredience}
-                            value={reduceNumber}
-                          />
-                        </span>
-                        <span> To shop → </span>
-                        <span>{total[i] - reduceNumber}</span>
-                      </div>
-                    </>
-                  );
-                })}
-              </div>
-            </div> */}
-          {/* Shopping list */}
-          {/* <div className="pt-8 pb-8">
-              <h2 className="font-bold text-2xl my-4">Shopping list</h2>
-              <ul>
-                {mealIngredienceArray.map((mealIngre) => {
-                  return (
-                    <li key={mealIngre}>
-                      <div>mince:{mealIngre.mince}</div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div> */}
         </main>
-
         <Footer />
       </div>
     </div>
