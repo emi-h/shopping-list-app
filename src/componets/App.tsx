@@ -5,6 +5,7 @@ import { FC, useEffect, useState } from "react";
 import { IngredienceType } from "src/type/IndredienceType";
 import { MealDataType } from "src/type/MealDataType";
 
+import { Footer } from "./Footer";
 import { Nav } from "./Nav";
 
 export const App: FC = () => {
@@ -200,9 +201,7 @@ export const App: FC = () => {
             </div> */}
       </main>
 
-      <footer>
-        <p className="m-100 text-center">Made by Emi in 2022</p>
-      </footer>
+      <Footer />
     </div>
   );
 };
