@@ -63,7 +63,11 @@ export const App: FC = () => {
       ),
     {}
   );
-  const copyText = JSON.stringify(total);
+  // console.log("total", total);
+  // console.log("Object.entries(total)", Object.entries(total));
+  // console.log("Object.entries(total).join", Object.entries(total).join(""));
+
+  const copyText = Object.entries(total).join("/");
 
   // 手持ちの材料をマイナスする
   // const handleReduceIngredience = (e: ChangeEvent<HTMLInputElement>) => {
@@ -134,20 +138,22 @@ export const App: FC = () => {
           <h2 className="font-bold text-2xl my-4">
             3.Ingredience list：Generated the ingredience list from your meal.
           </h2>
-          {/* Object.keys(total)でkeyの配列を作成 */}
-          {Object.keys(total).map((i) => {
-            return (
-              <>
-                <div key={i}>
-                  <span>{i}</span>: <span>{total[i]}</span>
-                </div>
-              </>
-            );
-          })}
+          <div className="mb-4">
+            {/* Object.keys(total)でkeyの配列を作成 */}
+            {Object.keys(total).map((i) => {
+              return (
+                <>
+                  <div key={i}>
+                    <span>{i}</span>: <span>{total[i]}</span>
+                  </div>
+                </>
+              );
+            })}
+          </div>
           <CopyButton value={copyText}>
             {({ copied, copy }) => (
               <Button color={copied ? "teal" : "blue"} onClick={copy}>
-                {copied ? "Copied text" : "Copy text 実装中"}
+                {copied ? "Copied!" : "Copy Ingredience list"}
               </Button>
             )}
           </CopyButton>
