@@ -4,10 +4,6 @@ import { useState } from "react";
 import { mealData } from "src/componets/MealList/MealData";
 import { IngredienceType } from "src/type/IndredienceType";
 import { MealDataType } from "src/type/MealDataType";
-// import {
-//   ReduceValueArrayType,
-//   ReduceValueType,
-// } from "src/type/reduceValueArrayType";
 
 const Home: NextPage = () => {
   const [mealArray, setMealArray] = useState<MealDataType[]>(mealData);
@@ -15,7 +11,6 @@ const Home: NextPage = () => {
   const [IngredienceArray, setIngredienceArray] = useState<IngredienceType[]>(
     []
   );
-  // const [reduceNumber, setReduceNumber] = useState<number>();
 
   // クリックしたメニューの配列を作成
   const handleMealchoise = (id: number) => {
@@ -51,13 +46,6 @@ const Home: NextPage = () => {
     {}
   );
   // console.log("total", total);
-
-  // 手持ちの材料をマイナスする
-  // const handleReduceIngredience = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setReduceNumber(e.target.value);
-  //   console.log(e.target.value);
-  // };
-  // console.log("reduceValueArray", reduceValueArray);
 
   return (
     <div className="m-8 text-xl flex flex-col min-h-screen">
@@ -122,46 +110,6 @@ const Home: NextPage = () => {
             })}
           </div>
         </div>
-        {/* Ingredience you already have */}
-        {/* <div className="pt-8 pb-8">
-          <h2 className="font-bold text-2xl my-4">
-            Ingredience you already have
-          </h2>
-          <div>
-            {Object.keys(total).map((i) => {
-              return (
-                <>
-                  <div key={i} className="mb-4">
-                    <span>{i}</span>:{" "}
-                    <span>
-                      {" "}
-                      <input
-                        type="number"
-                        onChange={handleReduceIngredience}
-                        value={reduceNumber}
-                      />
-                    </span>
-                    <span> To shop → </span>
-                    <span>{total[i] - reduceNumber}</span>
-                  </div>
-                </>
-              );
-            })}
-          </div>
-        </div> */}
-        {/* Shopping list */}
-        {/* <div className="pt-8 pb-8">
-          <h2 className="font-bold text-2xl my-4">Shopping list</h2>
-          <ul>
-            {mealIngredienceArray.map((mealIngre) => {
-              return (
-                <li key={mealIngre}>
-                  <div>mince:{mealIngre.mince}</div>
-                </li>
-              );
-            })}
-          </ul>
-        </div> */}
       </main>
 
       <footer>
