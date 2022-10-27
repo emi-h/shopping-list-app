@@ -77,7 +77,7 @@ const Home: NextPage = () => {
   );
 
   return (
-    <div className="m-8 text-xl flex flex-col min-h-screen">
+    <div className="text-xl flex flex-col min-h-screen">
       <Head>
         <title>Shopping list generator</title>
         <meta
@@ -87,7 +87,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <main className="flex-grow">
+      <main className="flex-grow mt-8 p-8">
         <MealList mealArray={mealArray} handleMealchoise={handleMealchoise} />
         <TickedMealList TickedMealArray={TickedMealArray} />
         <IngredienceList IngredienceArray={total} />

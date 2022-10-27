@@ -5,30 +5,18 @@ export const mealData: MealDataType[] = [
     id: 1,
     name: "chilli",
     checked: false,
-    ingrediences: [
-      { amount: 300, ingredience: "mince" },
-      { amount: 1, ingredience: "onions" },
-      { amount: 1, ingredience: "tinnedTomato" },
-    ],
+    ingrediences: [{ mince: 100 }, { onions: 10 }, { tinnedTomato: 2 }],
   },
   {
     id: 2,
     name: "curry",
     checked: false,
-    ingrediences: [
-      { amount: 300, ingredience: "mince" },
-      { amount: 1, ingredience: "onions" },
-      { amount: 1, ingredience: "tinnedTomato" },
-    ],
+    ingrediences: [{ mince: 100 }, { onions: 10 }, { tinnedTomato: 2 }],
   },
   {
     id: 3,
     name: "curry2",
     checked: false,
-    ingrediences: [
-      { amount: 300, ingredience: "mince" },
-      { amount: 1, ingredience: "onions" },
-      { amount: 1, ingredience: "tinnedTomato" },
-    ],
+    ingrediences: [{ mince: 100 }, { onions: 10 }, { tinnedTomato: 2 }],
   },
 ];

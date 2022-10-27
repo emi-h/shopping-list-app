@@ -11,17 +11,20 @@ type Props = {
 export const MealList: FC<Props> = (props) => {
   // console.log("props", props);
   return (
-    <div>
-      {props.mealArray.map((meal) => {
-        return (
-          <div key={meal.id}>
-            <button onClick={() => props.handleMealchoise(meal.id)}>
-              {meal.checked ? "○" : "✖︎"}
-            </button>
-            <span>{meal.name}</span>
-          </div>
-        );
-      })}
-    </div>
+    <>
+      <h2 className="font-bold text-2xl my-4">Click the Meals!</h2>
+      <div>
+        {props.mealArray.map((meal) => {
+          return (
+            <div key={meal.id}>
+              <button onClick={() => props.handleMealchoise(meal.id)}>
+                <span>{meal.checked ? "○" : "✖︎"}</span>
+                <span>{meal.name}</span>
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </>
   );
 };
