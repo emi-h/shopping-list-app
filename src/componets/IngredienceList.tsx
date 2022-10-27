@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { MealDataType } from "src/type/MealDataType";
+// import { MealDataType } from "src/type/MealDataType";
 
 export const IngredienceList: FC<any> = (props) => {
   const total = props.IngredienceArray;

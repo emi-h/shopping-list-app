@@ -4,8 +4,6 @@ import { MealDataType } from "src/type/MealDataType";
 export const TickedMealList: FC<{ TickedMealArray: MealDataType[] }> = ({
   TickedMealArray,
 }) => {
-  console.log("mealArrayCh_comp", TickedMealArray);
-
   return (
     <div>
       <div className="pt-8 pb-8">

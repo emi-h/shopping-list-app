@@ -1,3 +1,4 @@
-export type IngredienceType = {
-  [prop: string]: number;
-};
+export type IngredienceType = [{
+  amount:number;
+  ingredience: string
+}];
