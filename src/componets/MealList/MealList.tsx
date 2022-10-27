@@ -1,16 +1,24 @@
 import React, { FC } from "react";
 import { MealDataType } from "src/type/MealDataType";
 
-export const MealList: FC<{ mealArray: MealDataType[] }> = ({ mealArray }) => {
+type Props = {
+  // [FIX ME]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  handleMealchoise: any;
+  mealArray: MealDataType[];
+};
+
+export const MealList: FC<Props> = (props) => {
+  // console.log("props", props);
   return (
     <div>
-      {mealArray.map((meal) => {
+      {props.mealArray.map((meal) => {
         return (
           <div key={meal.id}>
-            <label>
-              <input type="checkbox" checked={true} />
-              {meal.name}
-            </label>
+            <button onClick={() => props.handleMealchoise(meal.id)}>
+              {meal.checked ? "○" : "✖︎"}
+            </button>
+            <span>{meal.name}</span>
           </div>
         );
       })}

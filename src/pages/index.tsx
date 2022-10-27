@@ -1,19 +1,44 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Footer } from "src/componets/Footer";
+import { Header } from "src/componets/Header";
+import { IngredienceList } from "src/componets/IngredienceList";
 import { mealData } from "src/componets/MealList/MealData";
+import { MealList } from "src/componets/MealList/MealList";
+import { TickedMealList } from "src/componets/TickedMealList";
 import { IngredienceType } from "src/type/IndredienceType";
 import { MealDataType } from "src/type/MealDataType";
 
+import { supabase } from "./lib/supabaseClient";
+
 const Home: NextPage = () => {
   const [mealArray, setMealArray] = useState<MealDataType[]>(mealData);
-  const [checkedMealArray, setCheckedMealArray] = useState<MealDataType[]>([]);
+  const [TickedMealArray, setTickedMealArray] = useState<MealDataType[]>([]);
   const [IngredienceArray, setIngredienceArray] = useState<IngredienceType[]>(
     []
   );
 
-  // クリックしたメニューの配列を作成
+  async function getMenu() {
+    const {
+      data: menuArray,
+      error,
+      status,
+    } = await supabase
+      .from("menus")
+      .select("id,name,checked,ingrediences(ingre_amount)");
+
+    if (menuArray) {
+      setMealArray(menuArray);
+    }
+  }
+  useEffect(() => {
+    getMenu();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleMealchoise = (id: number) => {
+    // クリックしたメニューのidを反転して新しい配列を作成
     const newMealArray = mealArray.map((mealArray) => {
       if (mealArray.id === id) {
         mealArray.checked = !mealArray.checked;
@@ -21,16 +46,21 @@ const Home: NextPage = () => {
       return mealArray;
     });
     setMealArray(newMealArray);
-  };
 
-  // 決定したメニューの材料の配列を作成
-  const handleSetMeal = () => {
-    const newMealArray = mealArray.filter((meal) => meal.checked);
-    setCheckedMealArray(newMealArray);
-    const newIngredienceArray = newMealArray.map((meal) => {
-      return meal.ingredience;
+    //チェックされたものだけ取り出して配列作成
+    const newMealArray02 = mealArray.filter((meal) => meal.checked);
+    setTickedMealArray(newMealArray02);
+
+    // 決定したメニューの材料の配列IngredienceArrayを作成
+    const newIngredienceArray = newMealArray02.map((meal) => {
+      return meal.ingrediences;
     });
-    setIngredienceArray(newIngredienceArray);
+    const array: [] = [];
+    const a = array.concat(...newIngredienceArray);
+    const ingrearray = a.map((c) => {
+      return c.ingre_amount;
+    });
+    setIngredienceArray(ingrearray);
   };
 
   // 同じ材料を計算して配列を作成
@@ -45,7 +75,6 @@ const Home: NextPage = () => {
       ),
     {}
   );
-  // console.log("total", total);
 
   return (
     <div className="m-8 text-xl flex flex-col min-h-screen">
@@ -57,66 +86,14 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Header />
       <main className="flex-grow">
-        <h1 className="text-center text-5xl">Shopping list generator</h1>
-        {/* Meal list */}
-        <div className="pt-8 pb-8">
-          <h2 className="font-bold text-2xl my-4">Meal list</h2>
-          <div>
-            {mealArray.map((meal) => {
-              return (
-                <div key={meal.id}>
-                  <button
-                    onClick={() => {
-                      handleMealchoise(meal.id);
-                    }}
-                  >
-                    {meal.checked ? "○" : "✖︎"}
-                  </button>
-                  <span>{meal.name}</span>
-                </div>
-              );
-            })}
-          </div>
-          <button className="border p-4 mt-8" onClick={handleSetMeal}>
-            Set a meal list
-          </button>
-        </div>
-        {/* Meal list(ticked) */}
-        <div className="pt-8 pb-8">
-          <h2 className="font-bold text-2xl my-4">Meal list(ticked)</h2>
-          <div>
-            {checkedMealArray.map((meal) => {
-              return (
-                <div key={meal.id}>
-                  <div>{meal.name}</div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-        {/* Ingredience list */}
-        <div className="pt-8 pb-8">
-          <h2 className="font-bold text-2xl my-4">Ingredience list</h2>
-          <div>
-            {Object.keys(total).map((i) => {
-              return (
-                <>
-                  <div key={i}>
-                    <span>{i}</span>: <span>{total[i]}</span>
-                  </div>
-                </>
-              );
-            })}
-          </div>
-        </div>
+        <MealList mealArray={mealArray} handleMealchoise={handleMealchoise} />
+        <TickedMealList TickedMealArray={TickedMealArray} />
+        <IngredienceList IngredienceArray={total} />
       </main>
-
-      <footer>
-        <p className="m-100 text-center">Made by Emi in 2022</p>
-      </footer>
+      <Footer />
     </div>
   );
 };
-
 export default Home;
