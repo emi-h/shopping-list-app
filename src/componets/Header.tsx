@@ -4,7 +4,7 @@ import { FC } from "react";
 export const Header: FC = () => {
   return (
     <>
-      <div className="flex items-center justify-between border-b-4 p-4">
+      <div className="flex items-center justify-between border-b-2 p-4">
         <h1 className="text-xl">Shopping list generator :)</h1>
         <nav>
           <ul className="flex justify-center align-center h-full">

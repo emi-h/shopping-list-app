@@ -17,9 +17,12 @@ export const MealList: FC<Props> = (props) => {
         {props.mealArray.map((meal) => {
           return (
             <div key={meal.id}>
-              <button onClick={() => props.handleMealchoise(meal.id)}>
+              <button
+                onClick={() => props.handleMealchoise(meal.id)}
+                className="border p-2 w-40 text-left"
+              >
                 <span>{meal.checked ? "○" : "✖︎"}</span>
-                <span>{meal.name}</span>
+                <span className="inline-block ml-4">{meal.name}</span>
               </button>
             </div>
           );

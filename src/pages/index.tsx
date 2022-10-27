@@ -87,7 +87,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <main className="flex-grow mt-8 p-8">
+      <main className="flex-grow mt-8 p-4">
         <MealList mealArray={mealArray} handleMealchoise={handleMealchoise} />
         <TickedMealList TickedMealArray={TickedMealArray} />
         <IngredienceList IngredienceArray={total} />
