@@ -1,10 +1,9 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Footer } from "src/componets/Footer";
 import { Header } from "src/componets/Header";
 import { IngredienceList } from "src/componets/IngredienceList";
-import { mealData } from "src/componets/MealList/MealData";
 import { MealList } from "src/componets/MealList/MealList";
 import { TickedMealList } from "src/componets/TickedMealList";
 import { IngredienceType } from "src/type/IndredienceType";
@@ -12,30 +11,17 @@ import { MealDataType } from "src/type/MealDataType";
 
 import { supabase } from "./lib/supabaseClient";
 
-const Home: NextPage = () => {
-  const [mealArray, setMealArray] = useState<MealDataType[]>(mealData);
+type Props = {
+  errors?: string;
+  list: MealDataType[];
+};
+
+const Home: NextPage<Props> = ({ errors, list }) => {
+  const [mealArray, setMealArray] = useState<MealDataType[]>(list);
   const [TickedMealArray, setTickedMealArray] = useState<MealDataType[]>([]);
   const [IngredienceArray, setIngredienceArray] = useState<IngredienceType[]>(
     []
   );
-
-  async function getMenu() {
-    const {
-      data: menuArray,
-      error,
-      status,
-    } = await supabase
-      .from("menus")
-      .select("id,name,checked,ingrediences(ingre_amount)");
-
-    if (menuArray) {
-      setMealArray(menuArray);
-    }
-  }
-  useEffect(() => {
-    getMenu();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleMealchoise = (id: number) => {
     // クリックしたメニューのidを反転して新しい配列を作成
@@ -47,34 +33,38 @@ const Home: NextPage = () => {
     });
     setMealArray(newMealArray);
 
-    //チェックされたものだけ取り出して配列作成
-    const newMealArray02 = mealArray.filter((meal) => meal.checked);
-    setTickedMealArray(newMealArray02);
+    const trueMealArray = mealArray
+      //チェックされたものだけ取り出して配列作成
+      .filter((meal) => meal.checked);
+    setTickedMealArray(trueMealArray);
 
-    // 決定したメニューの材料の配列IngredienceArrayを作成
-    const newIngredienceArray = newMealArray02.map((meal) => {
-      return meal.ingrediences;
-    });
-    const array: [] = [];
-    const a = array.concat(...newIngredienceArray);
-    const ingrearray = a.map((c) => {
-      return c.ingre_amount;
-    });
-    setIngredienceArray(ingrearray);
+    const ingredienceArray = trueMealArray
+      // チェックしたメニューの材料の配列を作成
+      .flatMap((meal) => {
+        return meal.ingrediences;
+      });
+
+    // 同じ材料を計算して配列を作成
+    // [FIX ME]:Type
+    const totalIngredienceObj = ingredienceArray.reduce((prev, current) => {
+      return {
+        ...prev,
+        [current.ingredience]: prev[current.ingredience]
+          ? prev[current.ingredience] + current.amount
+          : current.amount,
+      };
+    }, {} as IngredienceType);
+
+    const totalIngredienceArray = Object.entries(totalIngredienceObj).map(
+      function ([key, value]) {
+        return [key, value];
+      }
+    );
+    setIngredienceArray(totalIngredienceArray);
   };
 
-  // 同じ材料を計算して配列を作成
-  const total = IngredienceArray.reduce(
-    (s1, e) =>
-      Object.entries(e).reduce(
-        (s2, [k, v]) => ({
-          ...s2,
-          [k]: (s2[k] || 0) + v,
-        }),
-        s1
-      ),
-    {}
-  );
+  if (errors) return <div>Error...</div>;
+  if (!list?.length) return <div>missing data...</div>;
 
   return (
     <div className="text-xl flex flex-col min-h-screen">
@@ -90,10 +80,24 @@ const Home: NextPage = () => {
       <main className="flex-grow mt-8 p-4">
         <MealList mealArray={mealArray} handleMealchoise={handleMealchoise} />
         <TickedMealList TickedMealArray={TickedMealArray} />
-        <IngredienceList IngredienceArray={total} />
+        <IngredienceList IngredienceArray={IngredienceArray} />
       </main>
       <Footer />
     </div>
   );
 };
 export default Home;
+
+// get data from supabase
+export const getServerSideProps: GetServerSideProps = async () => {
+  const { data, error } = await supabase
+    .from("menus")
+    .select("id,name,checked,ingrediences(ingredience,amount)");
+
+  return {
+    props: {
+      errors: error,
+      list: data,
+    },
+  };
+};

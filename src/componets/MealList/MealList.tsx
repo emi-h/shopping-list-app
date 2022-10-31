@@ -13,13 +13,13 @@ export const MealList: FC<Props> = (props) => {
   return (
     <>
       <h2 className="font-bold text-2xl my-4">Click the Meals!</h2>
-      <div>
+      <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
         {props.mealArray.map((meal) => {
           return (
             <div key={meal.id}>
               <button
                 onClick={() => props.handleMealchoise(meal.id)}
-                className="border p-2 w-40 text-left"
+                className="border p-2 text-left"
               >
                 <span>{meal.checked ? "○" : "✖︎"}</span>
                 <span className="inline-block ml-4">{meal.name}</span>

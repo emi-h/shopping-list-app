@@ -1,4 +1,1 @@
-export type IngredienceType = [{
-  amount:number;
-  ingredience: string
-}];
+export type IngredienceType = (string | number)[];

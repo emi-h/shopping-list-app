@@ -1,23 +1,21 @@
 import React, { FC } from "react";
-// import { MealDataType } from "src/type/MealDataType";
+import { IngredienceType } from "src/type/IndredienceType";
 
-export const IngredienceList: FC<any> = (props) => {
-  const total = props.IngredienceArray;
+type Props = {
+  IngredienceArray: IngredienceType[];
+};
 
-  //   console.log("mealArrayCh_comp", TickedMealArray);
-
+export const IngredienceList: FC<Props> = ({ IngredienceArray }) => {
   return (
     <div>
       <div className="pt-8 pb-8">
         <h2 className="font-bold text-2xl my-4">Meal list(ticked)</h2>
         <div>
-          {Object.keys(total).map((i) => {
+          {IngredienceArray.map((item) => {
             return (
-              <>
-                <div key={i}>
-                  <span>{i}</span>: <span>{total[i]}</span>
-                </div>
-              </>
+              <div key={item[0]}>
+                <span>{item[0]}</span>: <span>{item[1]}</span>
+              </div>
             );
           })}
         </div>
