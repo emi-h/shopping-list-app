@@ -21,8 +21,8 @@ const AddPage: NextPage = () => {
     const ingreNum4 = e.currentTarget.ingreNum4.value;
     const ingreNum5 = e.currentTarget.ingreNum5.value;
 
-    console.log("ingreNum1", ingreNum1);
-    console.log("name", name);
+    // console.log("ingreNum1", ingreNum1);
+    // console.log("name", name);
 
     await supabase.from("menus").insert([{ name: name }, { checked: false }]);
     await supabase
