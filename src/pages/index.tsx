@@ -49,8 +49,10 @@ const Home: NextPage<Props> = ({ errors, list }) => {
     const totalIngredienceObj = ingredienceArray.reduce((prev, current) => {
       return {
         ...prev,
-        [current.ingredience]: prev[current.ingredience]
-          ? prev[current.ingredience] + current.amount
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        [current.ingredience]: prev[current.ingredience as any]
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          ? Number(prev[current.ingredience as any]) + Number(current.amount)
           : current.amount,
       };
     }, {} as IngredienceType);
