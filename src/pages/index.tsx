@@ -6,10 +6,9 @@ import { Header } from "src/componets/Header";
 import { IngredienceList } from "src/componets/IngredienceList";
 import { MealList } from "src/componets/MealList/MealList";
 import { TickedMealList } from "src/componets/TickedMealList";
+import { supabase } from "src/lib/supabaseClient";
 import { IngredienceType } from "src/type/IndredienceType";
 import { MealDataType } from "src/type/MealDataType";
-
-import { supabase } from "./lib/supabaseClient";
 
 type Props = {
   errors?: string;

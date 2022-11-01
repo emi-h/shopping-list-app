@@ -2,8 +2,7 @@
 import { NextPage } from "next";
 import { ComponentProps } from "react";
 import { Header } from "src/componets/Header";
-
-import { supabase } from "./lib/supabaseClient";
+import { supabase } from "src/lib/supabaseClient";
 
 const AddPage: NextPage = () => {
   const handleSubmit: ComponentProps<"form">["onSubmit"] = async (e) => {
