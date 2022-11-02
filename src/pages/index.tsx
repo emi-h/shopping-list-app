@@ -50,8 +50,8 @@ const Home: NextPage<Props> = ({ errors, list }) => {
         ...prev,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         [current.ingredience]: prev[current.ingredience as any]
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          ? Number(prev[current.ingredience as any]) + Number(current.amount)
+          ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            Number(prev[current.ingredience as any]) + Number(current.amount)
           : current.amount,
       };
     }, {} as IngredienceType);
