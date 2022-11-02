@@ -1,19 +1,29 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
-import { mealData } from "src/componets/MealList/MealData";
+import { Footer } from "src/componets/Footer";
+import { Header } from "src/componets/Header";
+import { IngredienceList } from "src/componets/IngredienceList";
+import { MealList } from "src/componets/MealList/MealList";
+import { TickedMealList } from "src/componets/TickedMealList";
+import { supabase } from "src/lib/supabaseClient";
 import { IngredienceType } from "src/type/IndredienceType";
 import { MealDataType } from "src/type/MealDataType";
 
-const Home: NextPage = () => {
-  const [mealArray, setMealArray] = useState<MealDataType[]>(mealData);
-  const [checkedMealArray, setCheckedMealArray] = useState<MealDataType[]>([]);
+type Props = {
+  errors?: string;
+  list: MealDataType[];
+};
+
+const Home: NextPage<Props> = ({ errors, list }) => {
+  const [mealArray, setMealArray] = useState<MealDataType[]>(list);
+  const [TickedMealArray, setTickedMealArray] = useState<MealDataType[]>([]);
   const [IngredienceArray, setIngredienceArray] = useState<IngredienceType[]>(
     []
   );
 
-  // クリックしたメニューの配列を作成
   const handleMealchoise = (id: number) => {
+    // クリックしたメニューのidを反転して新しい配列を作成
     const newMealArray = mealArray.map((mealArray) => {
       if (mealArray.id === id) {
         mealArray.checked = !mealArray.checked;
@@ -21,34 +31,44 @@ const Home: NextPage = () => {
       return mealArray;
     });
     setMealArray(newMealArray);
+
+    const trueMealArray = mealArray
+      //チェックされたものだけ取り出して配列作成
+      .filter((meal) => meal.checked);
+    setTickedMealArray(trueMealArray);
+
+    const ingredienceArray = trueMealArray
+      // チェックしたメニューの材料の配列を作成
+      .flatMap((meal) => {
+        return meal.ingrediences;
+      });
+
+    // 同じ材料を計算して配列を作成
+    // [FIX ME]:Type
+    const totalIngredienceObj = ingredienceArray.reduce((prev, current) => {
+      return {
+        ...prev,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        [current.ingredience]: prev[current.ingredience as any]
+          ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            Number(prev[current.ingredience as any]) + Number(current.amount)
+          : current.amount,
+      };
+    }, {} as IngredienceType);
+
+    const totalIngredienceArray = Object.entries(totalIngredienceObj).map(
+      function ([key, value]) {
+        return [key, value];
+      }
+    );
+    setIngredienceArray(totalIngredienceArray);
   };
 
-  // 決定したメニューの材料の配列を作成
-  const handleSetMeal = () => {
-    const newMealArray = mealArray.filter((meal) => meal.checked);
-    setCheckedMealArray(newMealArray);
-    const newIngredienceArray = newMealArray.map((meal) => {
-      return meal.ingredience;
-    });
-    setIngredienceArray(newIngredienceArray);
-  };
-
-  // 同じ材料を計算して配列を作成
-  const total = IngredienceArray.reduce(
-    (s1, e) =>
-      Object.entries(e).reduce(
-        (s2, [k, v]) => ({
-          ...s2,
-          [k]: (s2[k] || 0) + v,
-        }),
-        s1
-      ),
-    {}
-  );
-  // console.log("total", total);
+  if (errors) return <div>Error...</div>;
+  if (!list?.length) return <div>missing data...</div>;
 
   return (
-    <div className="m-8 text-xl flex flex-col min-h-screen">
+    <div className="text-xl flex flex-col min-h-screen">
       <Head>
         <title>Shopping list generator</title>
         <meta
@@ -57,66 +77,28 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex-grow">
-        <h1 className="text-center text-5xl">Shopping list generator</h1>
-        {/* Meal list */}
-        <div className="pt-8 pb-8">
-          <h2 className="font-bold text-2xl my-4">Meal list</h2>
-          <div>
-            {mealArray.map((meal) => {
-              return (
-                <div key={meal.id}>
-                  <button
-                    onClick={() => {
-                      handleMealchoise(meal.id);
-                    }}
-                  >
-                    {meal.checked ? "○" : "✖︎"}
-                  </button>
-                  <span>{meal.name}</span>
-                </div>
-              );
-            })}
-          </div>
-          <button className="border p-4 mt-8" onClick={handleSetMeal}>
-            Set a meal list
-          </button>
-        </div>
-        {/* Meal list(ticked) */}
-        <div className="pt-8 pb-8">
-          <h2 className="font-bold text-2xl my-4">Meal list(ticked)</h2>
-          <div>
-            {checkedMealArray.map((meal) => {
-              return (
-                <div key={meal.id}>
-                  <div>{meal.name}</div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-        {/* Ingredience list */}
-        <div className="pt-8 pb-8">
-          <h2 className="font-bold text-2xl my-4">Ingredience list</h2>
-          <div>
-            {Object.keys(total).map((i) => {
-              return (
-                <>
-                  <div key={i}>
-                    <span>{i}</span>: <span>{total[i]}</span>
-                  </div>
-                </>
-              );
-            })}
-          </div>
-        </div>
+      <Header />
+      <main className="flex-grow mt-8 p-4">
+        <MealList mealArray={mealArray} handleMealchoise={handleMealchoise} />
+        <TickedMealList TickedMealArray={TickedMealArray} />
+        <IngredienceList IngredienceArray={IngredienceArray} />
       </main>
-
-      <footer>
-        <p className="m-100 text-center">Made by Emi in 2022</p>
-      </footer>
+      <Footer />
     </div>
   );
 };
-
 export default Home;
+
+// get data from supabase
+export const getServerSideProps: GetServerSideProps = async () => {
+  const { data, error } = await supabase
+    .from("menus")
+    .select("id,name,checked,ingrediences(ingredience,amount)");
+
+  return {
+    props: {
+      errors: error,
+      list: data,
+    },
+  };
+};

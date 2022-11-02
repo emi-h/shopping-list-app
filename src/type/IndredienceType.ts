@@ -1,3 +1,1 @@
-export type IngredienceType = {
-  [prop: string]: number;
-};
+export type IngredienceType = (string | number)[];
